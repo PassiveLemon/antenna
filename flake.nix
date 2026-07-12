@@ -27,16 +27,15 @@
             self'.packages.default.nativeBuildInputs
             self'.packages.default.buildInputs
           ];
-          # export ANTENNA_SSH_FLAGS=""
+          # export ANTENNA_MAP_DIRS="/test/data//source/replacement/works;/test/config//dest/replacement/works"
           shellHook = ''
             export ANTENNA_SSH_PATH="${lib.getExe pkgs.openssh}"
             export ANTENNA_SSH_HOST="lemon@silver"
-            export ANTENNA_FFMPEG_PATH="/run/current-system/sw/bin/ssh"
-            export ANTENNA_SOURCE_DIR="/source/replacement/works"
-            export ANTENNA_DEST_DIR="/dest/replacement/works"
+            export ANTENNA_FFMPEG_PATH="/run/current-system/sw/bin/ffmpeg"
+            export ANTENNA_MAP_DIRS="/data/shows//mnt/titanium/Media/Shows;/config//mnt/titanium/docker/volumes/streaming/Jellyfin"
+            export ANTENNA_TEST='-i file:"/test/data/file-in.mp4" -hls_segment_filename "/test/config/file-out.mp4"'
             alias editor="lite-xl $PWD &"
             alias nr="nix run"
-            export ANTENNA_TEST='-i file:"/test/data/file-in.mp4" -hls_segment_filename "/test/config/file-out.mp4"'
           '';
         };
       };

@@ -6,8 +6,7 @@ config.ssh_flags = os.getenv("ANTENNA_SSH_FLAGS") or default_ssh_flags
 
 config.ffmpeg_path = os.getenv("ANTENNA_FFMPEG_PATH") or "/usr/bin/ffmpeg"
 
-config.source_dir = os.getenv("ANTENNA_SOURCE_DIR") or ""
-config.dest_dir = os.getenv("ANTENNA_DEST_DIR") or ""
+config.map_dirs = os.getenv("ANTENNA_MAP_DIRS") -- Don't or to "" because we may not need to map
 
 for k, v in pairs(config) do
   if (v == "") then
