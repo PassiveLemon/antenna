@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , lua
-, openssh
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "antenna";
@@ -13,11 +12,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     lua
-    openssh
   ];
 
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out/bin
+    cp $src/* $out/bin
+
+    runHook postInstall
+  '';
+
   meta = with lib; {
-    description = "Run FFmpeg commands on another host, entirely over SSH";
+    description = "Run FFmpeg commands on another host";
     homepage = "https://github.com/PassiveLemon/antenna";
     changelog = "https://github.com/PassiveLemon/antenna/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3;
