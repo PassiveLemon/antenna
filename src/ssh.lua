@@ -10,8 +10,11 @@ function ssh.setup_args(cfg, cmd, args)
   end
   local remote = { cmd }
   -- Escape each ffmpeg argument for SSH
-  for _, arg in ipairs(args) do
-    table.insert(remote, "'" .. arg:gsub("'", [['"'"']]) .. "'")
+  if args then
+    for _, arg in ipairs(args) do
+      local escaped_arg = "'" .. arg:gsub("'", [['"'"']]) .. "'"
+      table.insert(remote, escaped_arg)
+    end
   end
   table.insert(call_args, table.concat(remote, " "))
   return call_args
@@ -34,7 +37,7 @@ end
 -- The command to run over SSH
 function ssh.cmd(cfg, cmd, args)
   local session = ssh.session(cfg, cmd, args)
-  print(session)
+  return session
 end
 
 return ssh

@@ -1,4 +1,5 @@
 **/result
 
-*.out
+src/ffmpeg
+src/ffprobe
 

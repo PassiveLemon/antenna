@@ -1,14 +1,15 @@
 # antenna
+Run FFmpeg commands on another host
 
 WIP
-
-Run FFmpeg commands on another host
 
 # Usage
 
 
 # Configuration
 
+
+# Todo
 Inspired by rffmpeg, Antenna also aims to allow running ffmpeg commands on other hosts, but with more configuration.
 Currently, rffmpeg will redirect ffmpeg calls verbatim, meaning that input/output paths need to be the same on both systems.
 This means that you may need to put NFS shares in a couple places on the clients filesystem to ensure all host internal paths are mapped correctly.
@@ -19,10 +20,13 @@ The goal of Antenna is to address this issue by rewriting source and destination
 Todo:
 - General
   - [x] Env var configuration to avoid using flags
+  - [ ] Logging
 - [x] SSH
   - [x] SSH session
   - [x] Run commands
   - [ ] Start an sftp share from the host to client?
 - [x] FFmpeg
   - [x] Rewrite paths
+  - [x] FFprobe
+  - [x] Fallback to local ffmpeg if remote fails
 

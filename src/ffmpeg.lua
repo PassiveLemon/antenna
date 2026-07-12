@@ -1,5 +1,7 @@
 local ssh = require("ssh")
 
+local posix = require("posix")
+
 local ffmpeg = { }
 
 -- Rewrite paths and return all ffmpeg args
@@ -16,11 +18,33 @@ function ffmpeg.rewrite_paths(cfg, args)
   return args
 end
 
+-- Run a command locally
+function ffmpeg.local_ffmpeg(cmd, args)
+  local call_args = { cmd }
+  for _, arg in ipairs(args) do
+    table.insert(call_args, arg)
+  end
+  local code = posix.spawn(call_args)
+  if code ~= 0 then
+    print("Error: command exited with non-zero code " .. code)
+    return false
+  end
+  return true
+end
+
 -- The ffmpeg command to run
 function ffmpeg.cmd(cfg, args)
   local cmd = cfg.ffmpeg_path
+  if args[0]:match("ffprobe") then
+    cmd = cfg.ffprobe_path
+  end
   local flags = ffmpeg.rewrite_paths(cfg, args)
-  ssh.cmd(cfg, cmd, flags)
+  session = ssh.cmd(cfg, cmd, flags)
+  if not session then
+    print("Warning: remote ffmpeg command failed, running locally...")
+    session = ffmpeg.local_ffmpeg(cmd, flags)
+  end
+  return session
 end
 
 return ffmpeg

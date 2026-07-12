@@ -4,7 +4,8 @@ local config = require("config")
 local ffmpeg = require("ffmpeg")
 
 local function main(args)
-  ffmpeg.cmd(config, args)
+  local result = ffmpeg.cmd(config, args)
+  return result
 end
 
 main(arg)
