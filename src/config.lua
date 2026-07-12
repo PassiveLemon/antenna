@@ -1,10 +1,12 @@
 local config = { }
 
 config.ssh_path = os.getenv("ANTENNA_SSH_PATH") or "/usr/bin/ssh"
+config.ssh_host = os.getenv("ANTENNA_SSH_HOST") or ""
+config.ssh_id =  os.getenv("ANTENNA_SSH_ID") or (os.getenv("HOME") .. "/.ssh/id_ed25519")
 config.ssh_flags = {
   "-i",
-  (os.getenv("HOME") .. "/.ssh/id_ed25519"),
-  os.getenv("ANTENNA_SSH_HOST"),
+  config.ssh_id,
+  config.ssh_host,
 }
 
 config.ffmpeg_path = os.getenv("ANTENNA_FFMPEG_PATH") or "/usr/bin/ffmpeg"
