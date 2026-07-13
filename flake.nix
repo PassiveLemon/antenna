@@ -18,7 +18,8 @@
     in
     {
       devShells = {
-        default = pkgs.mkShell {
+        default = self'.devShells.antenna;
+        antenna = pkgs.mkShell {
           packages = let
             luaEnv = pkgs.lua.withPackages (ps: with ps; ([
               luaposix
@@ -27,8 +28,8 @@
             luaEnv
           ];
           packagesFrom = [
-            self'.packages.default.nativeBuildInputs
-            self'.packages.default.buildInputs
+            self'.packages.antenna.nativeBuildInputs
+            self'.packages.antenna.buildInputs
           ];
           shellHook = ''
             export ANTENNA_SSH_PATH="/run/current-system/sw/bin/ssh"
@@ -45,6 +46,16 @@
       packages = {
         default = self'.packages.antenna;
         antenna = pkgs.callPackage ./package.nix { };
+      };
+      apps = {
+        ffmpeg = {
+          type = "app";
+          program = "${self'.packages.antenna}/bin/antenna-ffmpeg";
+        };
+        ffprobe = {
+          type = "app";
+          program = "${self'.packages.antenna}/bin/antenna-ffprobe";
+        };
       };
     };
   };

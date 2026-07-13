@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "antenna";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = ./.;
 
@@ -27,10 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
 
     cp -r $src/src/* $output
-    ln -s $output/antenna.lua $out/bin/.antenna-wrapped
+    ln -s $output/antenna.lua $out/bin/antenna
 
-    makeWrapper "$out/bin/.antenna-wrapped" "$out/bin/antenna" \
-      --set LUA_PATH "$output/?.lua"
+    makeWrapper "$out/bin/antenna" "$out/bin/antenna-ffmpeg" \
+      --set LUA_PATH "$output/?.lua" \
+      --set ANTENNA_MODE "ffmpeg"
+
+    makeWrapper "$out/bin/antenna" "$out/bin/antenna-ffprobe" \
+      --set LUA_PATH "$output/?.lua" \
+      --set ANTENNA_MODE "ffprobe"
 
     runHook postInstall
   '';

@@ -35,7 +35,7 @@ end
 -- The ffmpeg command to run
 function ffmpeg.cmd(cfg, args)
   local cmd = cfg.ffmpeg_path
-  if args[0]:match("ffprobe") then
+  if cfg.mode == "ffprobe" then
     cmd = cfg.ffprobe_path
   end
   local flags = ffmpeg.rewrite_paths(cfg, args)
