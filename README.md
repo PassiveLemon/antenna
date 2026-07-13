@@ -1,13 +1,13 @@
 # Outsource
-Run FFmpeg commands on another host, with directory mapping
+Outsource your FFmpeg calls to a different machine, with directory mapping
 
 ## Limitations
 While Outsource allows you to run FFmpeg commands on another host, you need to be aware of the hardware capabilities of both. Outsource is effectively an FFmpeg proxy, not a load-balancer (though this may change in the future).
 For example, Outsource can be used to enable hardware transcoding for Jellyfin if the host machine doesn't have a GPU. However, if the client is inaccessible or the SSH calls fail and requires the host to fall back to local FFmpeg calls, then that GPU is no longer available and the local calls will fail.
 
 # Usage
-## Requirements
-Lua with luaposix
+Requirements:
+- Lua with luaposix
 
 ## Host
 The host requires Outsource and some way to share directories with the client, such as NFS or SMB. The share is so the output files are accessible back on the host.
@@ -40,7 +40,7 @@ Your destination mappings must be able to access the paths within the share(s).
 
 After the host and client are configured, test the connection:
 ```
-/path/to/ffmpeg(outsource.lua) -version
+/path/to/outsource-ffmpeg -version
 ```
 Verify that the returned version is for the actual FFmpeg binary on the client and not the fallback host binary:
 ```
@@ -50,10 +50,10 @@ built with gcc 15.2.0 (GCC)
 
 # Configuration
 | Variable | Default | Details |
-|:-|:-|:-|:-|
+|:-|:-|:-|
 | `OUTSOURCE_SSH_PATH` | `/usr/bin/ssh` | The path on the host to the SSH binary |
 | `OUTSOURCE_SSH_HOST` | `""` (Required) | The client hostname, eg: `user@host` |
-| `OUTSOURCE_SSH_ID` | `/home/<user>/.ssh/id_ed25519` | The path on the host to the SSH identity file, required to initialize an SSH session |
+| `OUTSOURCE_SSH_ID` | `$HOME/.ssh/id_ed25519` | The path on the host to the SSH identity file, required to initialize an SSH session |
 | `OUTSOURCE_FFMPEG_PATH` | `/usr/bin/ffmpeg` | The path on the client to the FFmpeg binary |
 | `OUTSOURCE_FFPROBE_PATH` | `/usr/bin/ffprobe` | The path on the client to the FFprobe binary |
 | `OUTSOURCE_FFMPEG_ALLBACK_PATH` | `/usr/bin/ffmpeg` | The local path on the host to the FFmpeg binary |
@@ -72,7 +72,6 @@ Todo:
 - General
   - [x] Env var configuration to avoid using flags
   - [ ] Logging
-  - Find a better name for the project
 - [x] SSH
   - [x] SSH session
     - Use other flags to improve connections, like timeouts

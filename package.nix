@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Run FFmpeg commands on another host";
+    description = "Outsource your FFmpeg calls to a different machine, with directory mapping";
     homepage = "https://github.com/PassiveLemon/outsource";
     changelog = "https://github.com/PassiveLemon/outsource/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3;

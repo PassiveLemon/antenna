@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "Lua.diagnostics.globals": [
+    "posix"
+  ],
+  "Lua.diagnostics.unusedLocalExclude": [
+    "_"
+  ],
+  "Lua.diagnostics.disable": [
+    "redundant-parameter"
+  ],
+  "Lua.format.defaultConfig": {
+    "indent_style": "space",
+    "indent_size": "2"
+  }
+}
+
