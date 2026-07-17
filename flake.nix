@@ -37,7 +37,7 @@
             export OUTSOURCE_FFMPEG_PATH="/run/current-system/sw/bin/ffmpeg"
             export OUTSOURCE_FFPROBE_PATH="/run/current-system/sw/bin/ffprobe"
             export OUTSOURCE_MAP_DIRS="/data/shows//mnt/titanium/Media/Shows;/config//mnt/titanium/docker/volumes/streaming/Jellyfin"
-            export OUTSOURCE_TEST='-i file:"/test/data/file-in.mp4" -hls_segment_filename "/test/config/file-out.mp4"'
+            export OUTSOURCE_LOG_LEVEL="debug"
             alias editor="lite-xl $PWD &"
             alias nr="nix run"
           '';

@@ -1,3 +1,5 @@
+local log = require("log")
+
 local posix = require("posix")
 
 local ssh = { }
@@ -5,7 +7,8 @@ local ssh = { }
 -- Set up the SSH path, flags, and ffmpeg command for running
 function ssh.setup_args(cfg, cmd, args)
   local call_args = { cfg.ssh_path }
-  for _, v in ipairs(cfg.ssh_flags) do
+  local ssh_flags = { "-i", cfg.ssh_id, cfg.ssh_host }
+  for _, v in ipairs(ssh_flags) do
     table.insert(call_args, v)
   end
   local remote = { cmd }
@@ -25,10 +28,10 @@ function ssh.session(cfg, cmd, args)
   local call_args = ssh.setup_args(cfg, cmd, args)
   local code = posix.spawn(call_args)
   if code == 255 then
-    print("Error: failed to start ssh session: exit code " .. code)
+    log.error("Failed to start SSH session: exit code " .. code)
     return false
   elseif code ~= 0 then
-    print("Error: command exited with non-zero code " .. code)
+    log.error("Command exited with non-zero code " .. code)
     return false
   end
   return true

@@ -30,6 +30,8 @@ Note the double-slash, it is necessary to separate out the host and client paths
 
 Outsource can also fallback to local FFmpeg if the client fails in any way. Ensure that `OUTSOURCE_FFMPEG_ALLBACK_PATH` and `OUTSOURCE_FFPROBE_FALLBACK_PATH` are set to an actual FFmpeg/FFprobe binary on the host system and NOT the Outsource link.
 
+By default, Outsource will attempt to log everything to `/tmp/outsource/log.txt` (`OUTSOURCE_LOG_DIR`) and the logging level can be changed with `OUTSOURCE_LOG_LEVEL`. If you want to disable logging, set the level to "none". Just note that Outsource doesn't manage the size of the logs so you need to ensure they clear automatically.
+
 ## Client
 Install FFmpeg and take note of the binary location. If it is not at `/usr/bin/ffmpeg` then change `OUTSOURCE_FFMPEG_PATH` and `OUTSOURCE_FFPROBE_PATH` accordingly.
 
@@ -59,6 +61,8 @@ built with gcc 15.2.0 (GCC)
 | `OUTSOURCE_FFMPEG_ALLBACK_PATH` | `/usr/bin/ffmpeg` | The local path on the host to the FFmpeg binary |
 | `OUTSOURCE_FFPROBE_FALLBACK_PATH` | `/usr/bin/ffprobe` | The local path on the host to the FFprobe binary |
 | `OUTSOURCE_MAP_DIRS` | `nil` | A list of semicolon (;) separated host-to-client path mappings, eg: `/host/location//client/location` means map from `/host/location` to `/client/location`. The double-slash is where the paths are split. |
+| `OUTSOURCE_LOG_DIR` | `/tmp/outsource/log.txt` | The path on the host to log to |
+| `OUTSOURCE_LOG_LEVEL` | `info` | The logging level to use. One of `debug`, `info`, `warn`, `error`, `fatal`. |
 
 # Other
 Outsource's creation was inspired by some limitations with [rffmpeg](https://github.com/joshuaboniface/rffmpeg).
@@ -71,12 +75,11 @@ Rewriting paths solves this by allowing any host directory to point to any clien
 Todo:
 - General
   - [x] Env var configuration to avoid using flags
-  - [ ] Logging
+  - [x] Logging
 - [x] SSH
-  - [x] SSH session
-    - Use other flags to improve connections, like timeouts
   - [x] Run commands
-  - [ ] Start an sftp share from the host to client?
+  - [ ] Reuse session? Instead of creating an SSH connection for each call, just send commands to an existing session
+  - [ ] Start an SFTP share from the host to client?
 - [x] FFmpeg
   - [x] Rewrite paths
   - [x] FFprobe

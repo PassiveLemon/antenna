@@ -1,3 +1,4 @@
+local log = require("log")
 local ssh = require("ssh")
 
 local posix = require("posix")
@@ -6,12 +7,11 @@ local ffmpeg = { }
 
 -- Rewrite paths and return all ffmpeg args
 function ffmpeg.rewrite_paths(cfg, args)
-  -- Remove cmd and rewrite all paths that match a mapping
-  args[0] = nil
-  for i, _ in ipairs(args) do
-    for path_map in cfg.map_dirs:gmatch("[^;]+") do
-      local from = path_map:match('^(.-)//')
-      local to = path_map:match('/(/.-)$')
+  for path_map in cfg.map_dirs:gmatch("[^;]+") do
+    local from = path_map:match('^(.-)//')
+    local to = path_map:match('/(/.-)$')
+    log.debug("Mapping " .. from .. " to " .. to)
+    for i, _ in ipairs(args) do
       args[i] = args[i]:gsub(from, to)
     end
   end
@@ -26,7 +26,7 @@ function ffmpeg.local_ffmpeg(cmd, args)
   end
   local code = posix.spawn(call_args)
   if code ~= 0 then
-    print("Error: command exited with non-zero code " .. code)
+    log.error("Command exited with non-zero code " .. code)
     return false
   end
   return true
@@ -34,14 +34,18 @@ end
 
 -- The ffmpeg command to run
 function ffmpeg.cmd(cfg, args)
+  log.info("Received " .. table.concat(args, " "))
+  -- Remove cmd from args table
+  args[0] = nil
   local cmd = cfg.ffmpeg_path
-  if cfg.mode == "ffprobe" then
+  if string.lower(cfg.mode) == "ffprobe" then
     cmd = cfg.ffprobe_path
   end
   local flags = ffmpeg.rewrite_paths(cfg, args)
+  log.info("Sending " .. table.concat(args, " "))
   local session = ssh.cmd(cfg, cmd, flags)
   if not session then
-    print("Warning: remote ffmpeg command failed, running locally...")
+    log.warn("Remote FFmpeg command failed, running locally...")
     session = ffmpeg.local_ffmpeg(cmd, flags)
   end
   return session
